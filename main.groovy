@@ -3,13 +3,6 @@
 /* Created by: Anthony Gaetano */
 
 def call(def base) {
-    /* The 'call(def base)' method is the script (ie. workflow / pipeline / job) that will run
-       'call(def base)' must return a Map with two keys: 1) 'response' 2) 'message'
-       The only two valid values for 'response' are: 1) 'ok' 2) 'error'
-       The 'message' key must be a String if 'response' is 'error'
-       The 'message' key may be any serializable object if 'response' is 'ok'
-       See the standards here: https://wiki.cvent.com/pages/viewpage.action?pageId=50965437 */
-
     this_base = base
     def glob_objs = this_base.get_glob_objs()
     def output = [
@@ -21,8 +14,57 @@ def call(def base) {
     def result = this.input_validation()
 
     if (result['response'] == 'error') {
-        return result
+        return input_validation
     }
+
+    /* Find the servers that the script needs run against */
+    def vcenters = ['mg01-vcsa1-001.core.cvent.org','mg11-vcsa1-001.core.cvent.org','mg20-vcsa1-001.core.cvent.org']
+    def list_of_vms = ''
+    def result = ''
+
+    for (Integer i = 0; i < vcenters.size(); i++) {
+        result = this_base.run_vmwarecli(
+            'Getting list of all virtual machines in vCenter',
+            "(get-vm).name -split '`n' | %{\$_.trim()}",
+            vcenters[i],
+            [:]
+        )
+
+        if (result['response'] == 'error') {
+            return result
+        }
+
+        if(i = 0) {
+            list_of_vms = result['message'].split('\r\n')
+        } else {
+            list_of_vms += result['message'].split('\r\n')
+        }
+    }
+
+
+    /* Read the PowerSheel file for the workflow */
+/*
+    def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
+
+    if(ps_script['response'] == 'error'){
+        return ps_script
+    }
+
+    def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
+
+    if(sql_script['response'] == 'error'){
+        return sql_script
+    }
+
+    ps_script = ps_script['message']
+    sql_script = sql_script['message']
+    sleep_time = 60
+*/
+
+    /* Run the PowerShell script */
+
+    output['response'] = 'ok'
+    output['message'] = list_of_vms
 
     return output
 }
@@ -33,20 +75,11 @@ def input_validation() {
         'message': ''
     ]
 
-    /* The following is an example of how to validate a job parameter named 'wf_address'
-
-    wf_address = wf_address.replaceAll('\\s', '').toLowerCase()
-    this_base.set_str_param('wf_address', wf_address)
-
-    if (wf_address == '') {
-        output['message'] = 'Missing required parameter wf_address'
+    if("${wf_region"}" == ''){
+        output['message'] = 'Missing required parameter'
 
         return output
     }
-
-    output['response'] = 'ok'
-
-    */
 
     return output
 }
