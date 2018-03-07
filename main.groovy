@@ -11,7 +11,7 @@ def call(def base) {
     ]
 
     /* Validate and sanitize the input */
-    def result = this.input_validation()
+    // def result = this.input_validation()
 
     if (result['response'] == 'error') {
         return input_validation
