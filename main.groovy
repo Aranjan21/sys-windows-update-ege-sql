@@ -67,7 +67,7 @@ def call(def base) {
 
     return output
 }
-
+/*
 def input_validation() {
     def output = [
         'response': 'error',
@@ -82,5 +82,5 @@ def input_validation() {
 
     return output
 }
-
+*/
 return this
