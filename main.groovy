@@ -46,7 +46,7 @@ def call(def base) {
     list_of_ege_servers = ''
 
     for (Integer i = 0; i < list_of_vms.size(); i++) {
-        if (i.contains(wf_region + '-ege')) {
+        if (i.toString().contains(wf_region + '-ege')) {
             list_of_ege_servers = i
         }
     }
