@@ -34,13 +34,12 @@ def call(def base) {
             return result
         }
 
-        if(i = 0) {
+        if (i == 0) {
             list_of_vms = result['message'].split('\r\n')
         } else {
             list_of_vms += result['message'].split('\r\n')
         }
     }
-
 
     /* Read the PowerSheel file for the workflow */
 /*
