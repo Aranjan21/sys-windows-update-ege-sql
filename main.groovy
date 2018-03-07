@@ -12,6 +12,7 @@ def call(def base) {
 
     /* Validate and sanitize the input */
     // def result = this.input_validation()
+    def result = ''
 
     if (result['response'] == 'error') {
         return input_validation
@@ -19,8 +20,7 @@ def call(def base) {
 
     /* Find the servers that the script needs run against */
     def vcenters = ['mg01-vcsa1-001.core.cvent.org','mg11-vcsa1-001.core.cvent.org','mg20-vcsa1-001.core.cvent.org']
-    def list_of_vms = ''
-    def result = ''
+    def list_of_vms = '''
 
     for (Integer i = 0; i < vcenters.size(); i++) {
         result = this_base.run_vmwarecli(
