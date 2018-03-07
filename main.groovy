@@ -17,6 +17,7 @@ def call(def base) {
         return input_validation
     }
     */
+
     def result = ''
 
     /* Find the servers that the script needs run against */
@@ -42,6 +43,14 @@ def call(def base) {
         }
     }
 
+    list_of_ege_servers = ''
+
+    for (Integer i = 0; i < list_of_vms.size(); i++) {
+        if (i.contains(wf_region + '-ege')) {
+            list_of_ege_servers = i
+        }
+    }
+
     /* Read the PowerSheel file for the workflow */
 /*
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
@@ -64,7 +73,7 @@ def call(def base) {
     /* Run the PowerShell script */
 
     output['response'] = 'ok'
-    output['message'] = list_of_vms
+    output['message'] = list_of_ege_servers
 
     return output
 }
