@@ -61,7 +61,7 @@ def call(def base) {
 
     def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
 
-    if(sql_script['response'] == 'ok'){
+    if(sql_script['response'] == 'error'){
         return sql_script
     }
 
@@ -85,7 +85,7 @@ def call(def base) {
             base.get_cred_id(list_of_ege_servers[i]),
             [
                 '_address_': list_of_ege_servers[i],
-                '_sql_': sql_script['message']
+                '_sql_': sql_script
             ]
         )
     }
