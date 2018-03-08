@@ -61,7 +61,7 @@ def call(def base) {
 
     def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
 
-    if(sql_script['response'] == 'error'){
+    if(sql_script['response'] == 'ok'){
         return sql_script
     }
 
@@ -72,10 +72,6 @@ def call(def base) {
     if(ps_script['response'] == 'error'){
         return ps_script
     }
-
-    this_base.log("Show me what the stuff is")
-    this_base.log(ps_script)
-    this_base.log(sql_script)
 
     ps_script = ps_script['message']
     sql_script = sql_script['message']
