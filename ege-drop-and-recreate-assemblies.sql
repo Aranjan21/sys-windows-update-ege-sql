@@ -1,9 +1,9 @@
 /* This script should be executed on EGE target server for your silo.
-DO NOT execute in your silo because it wont work. EGE target DB is on Target server, your silo is a initiator from where emails are queued not a traget. 
+DO NOT execute in your silo because it wont work. EGE target DB is on Target server, your silo is a initiator from where emails are queued not a traget.
 If you follow wiki, you will know how to find target server*/
 
 USE [EGE_TARGET] --Replace db name with designated target for your silo ex, EGE_TARGET_ap_403 for silo 403
-GO 
+GO
 
 ---Drop procedure 
 

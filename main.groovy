@@ -57,20 +57,20 @@ def call(def base) {
     /* Read the PowerSheel file for the workflow */
 
     // list_of_ege_servers = ['ap20-ege-101']
-    this_base.log("getting PS file")
-
-    def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
-
-    if(ps_script['response'] == 'ok'){
-        return ps_script
-    }
-
     this_base.log("getting SQL file")
 
     def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
 
     if(sql_script['response'] == 'error'){
         return sql_script
+    }
+
+    this_base.log("getting PS file")
+
+    def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
+
+    if(ps_script['response'] == 'error'){
+        return ps_script
     }
 
     ps_script = ps_script['message']
