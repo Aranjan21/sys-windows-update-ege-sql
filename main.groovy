@@ -57,7 +57,7 @@ def call(def base) {
 
     /* Read the PowerSheel file for the workflow */
 
-    list_of_ege_servers = 'ap20-ege-101'
+    list_of_ege_servers = ['ap20-ege-101']
 
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
 
