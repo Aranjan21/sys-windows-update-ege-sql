@@ -88,8 +88,8 @@ def call(def base) {
         )
     }
 
-    output['response'] = 'ok'
-    output['message'] = list_of_ege_servers.reverse()
+    // output['response'] = 'ok'
+    // output['message'] = list_of_ege_servers.reverse()
 
     return output
 }
