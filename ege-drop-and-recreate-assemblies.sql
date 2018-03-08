@@ -1,4 +1,4 @@
-/* This script should be executed on EGE target server for your silo. 
+/* This script should be executed on EGE target server for your silo.
 DO NOT execute in your silo because it wont work. EGE target DB is on Target server, your silo is a initiator from where emails are queued not a traget. 
 If you follow wiki, you will know how to find target server*/
 
@@ -23,7 +23,7 @@ DROP ASSEMBLY [SMDiagnostics]
 
 CREATE ASSEMBLY [SMDiagnostics]
 AUTHORIZATION [dbo]
-from 'C:\Windows\Microsoft.NET\Framework\v3.0\Windows Communication Foundation\SMDiagnostics.dll' 
+from 'C:\Windows\Microsoft.NET\Framework\v3.0\Windows Communication Foundation\SMDiagnostics.dll'
 with permission_set = UNSAFE;
 
 CREATE ASSEMBLY [System.Web]
