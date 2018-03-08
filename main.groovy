@@ -20,7 +20,7 @@ def call(def base) {
 
     def result = ''
 
-    /* Find the servers that the script needs run against */
+    /* Find the servers that the script needs run against
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
     def list_of_vms = ''
 
@@ -51,8 +51,14 @@ def call(def base) {
         }
     }
 
+    list_of_ege_servers = list_of_ege_servers.reverse()
+
+    */
+
     /* Read the PowerSheel file for the workflow */
-/*
+
+    list_of_ege_servers = 'ap20-ege-101'
+
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
 
     if(ps_script['response'] == 'error'){
@@ -68,12 +74,22 @@ def call(def base) {
     ps_script = ps_script['message']
     sql_script = sql_script['message']
     sleep_time = 60
-*/
 
     /* Run the PowerShell script */
+    for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
+        output = base.run_powershell(
+            "Attempting to drop and recreate assumblies on ${list_of_ege_servers[i]}",
+            ps_script,
+            base.get_cred_id(list_of_ege_servers[i]),
+            [
+                '_address_': list_of_ege_servers[i]
+                '_sql_': sql_script['message']
+            ]
+        )
+    }
 
     output['response'] = 'ok'
-    output['message'] = list_of_ege_servers
+    output['message'] = list_of_ege_servers.reverse()
 
     return output
 }

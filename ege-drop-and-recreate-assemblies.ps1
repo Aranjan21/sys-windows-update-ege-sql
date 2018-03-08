@@ -16,29 +16,48 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 # Therefore, some (not all) of those characters require escaping with `
 
 $remote = [scriptblock]::Create(@"
-    `$status = (Get-Service `"$env:_service_`" | select -ExpandProperty status)
+    filter timestamp {"$(Get-Date -Format G): $_"}
 
-    if(`$status -Match `"Stopped`"){
-        switch (`"$env:_choice_`")
-            {
-                `"Start`" {Start-Service `"$env:_service_`"; Write-Host `"$env:_service_ has been started`"}
-                `"Stop`" {Write-Host `"$env:_service_ is not running and cannot be stopped again`"}
-				`"Restart`" {Restart-Service `"$env:_service_`"; Write-Host `"$env:_service_ was stopped and has been started`"}
-                `"Status`" {Write-Host `"$env:_service_ is `$status`"}
-            }
-	}
-    if(`$status -Match `"Running`"){
-        switch (`"$env:_choice_`")
-            {
-                `"Start`" {Write-Host `"$env:_service_ is already running and cannot be started again`"}
-                `"Stop`" {Stop-Service `"$env:_service_`"; Write-Host `"$env:_service_ has been stopped`"}
-				`"Restart`" {Restart-Service `"$env:_service_`"; Write-Host `"$env:_service_ has been restarted`"}
-                `"Status`" {Write-Host `"$env:_service_ is `$status`"}
-            }
+    $query = $env:_sql_
+    $query_enum = @"
+    SET NOCOUNT ON
+    select name from sys.databases where name like 'EGE_TARGET%'
+    "@
+
+    Write-Output "Starting Run" | timestamp
+
+    $live = Test-Connection -Computername $env:_address_ -BufferSize 16 -Count 1 -Quiet
+    if ($live) {
+        $s = New-PSSession -ComputerName $env:_address_
+    } else {
+        Write-Output "$env:_address_ is not available, skipping."
+        continue
     }
-	if(`$status -Match `"Waiting`"){
-		`"$env:_service_ is in Waiting status. Please login and check the processes related to the service. They may need manually terminated`"
-	}
+
+    Write-Output "Starting Node: $env:_address_" | timestamp
+
+    # Adding in the SQL Snapins so we can leverage Invoke-Sqlcmd
+    Add-PSSnapin SqlServerCmdletSnapin100
+    Add-PSSnapin SqlServerProviderSnapin100
+
+    # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
+    $WarningPreference = "silentlyContinue"
+    filter timestamp {"$(Get-Date -Format G): $_"}
+    try {
+        $dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q $using:query_enum -h -1
+        foreach ($db in $dbs) {
+            $newquery = $using:query -replace "USE \[EGE_TARGET\]","USE [$db]"
+            Write-Output "Starting Database: $db" | timestamp
+            Invoke-Sqlcmd -Username cvent -Password n0rth -Query $newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
+            Write-Output "Completed Database: $db" | timestamp
+        }
+    } catch {
+        $errormessage = "ERROR: $_"
+        Write-Error $errormessage
+    }
+
+    Write-Output "Completed Node: $env:_address_" | timestamp
+
 "@)
 
 # Execute the script on the remote Windows machine
