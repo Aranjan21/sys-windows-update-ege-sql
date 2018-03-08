@@ -56,13 +56,16 @@ def call(def base) {
 
     /* Read the PowerSheel file for the workflow */
 
-    list_of_ege_servers = ['ap20-ege-101']
+    // list_of_ege_servers = ['ap20-ege-101']
+    this_base.log("getting PS file")
 
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
 
     if(ps_script['response'] == 'error'){
         return ps_script
     }
+
+    this_base.log("getting SQL file")
 
     def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
 
@@ -76,7 +79,7 @@ def call(def base) {
 
     /* Run the PowerShell script */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-        output = base.run_powershell(
+        output = this_base.run_powershell(
             "Attempting to drop and recreate assumblies on ${list_of_ege_servers[i]}",
             ps_script,
             base.get_cred_id(list_of_ege_servers[i]),

@@ -20,6 +20,7 @@ $remote = [scriptblock]::Create(@"
 
     $query = $env:_sql_
     $query_enum = @"
+
     SET NOCOUNT ON
     select name from sys.databases where name like 'EGE_TARGET%'
     "@
