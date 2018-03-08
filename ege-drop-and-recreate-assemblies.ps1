@@ -16,15 +16,13 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 # Therefore, some (not all) of those characters require escaping with `
 
 $remote = [scriptblock]::Create(@"
-    filter timestamp {"$(Get-Date -Format G): $_"}
-
     $query = $env:_sql_
     $query_enum = @"
     SET NOCOUNT ON
     select name from sys.databases where name like 'EGE_TARGET%'
     "@
 
-    Write-Output "Starting Run" | timestamp
+    Write-Output "Starting Run"
 
     $live = Test-Connection -Computername $env:_address_ -BufferSize 16 -Count 1 -Quiet
     if ($live) {
@@ -34,7 +32,7 @@ $remote = [scriptblock]::Create(@"
         continue
     }
 
-    Write-Output "Starting Node: $env:_address_" | timestamp
+    Write-Output "Starting Node: $env:_address_"
 
     # Adding in the SQL Snapins so we can leverage Invoke-Sqlcmd
     Add-PSSnapin SqlServerCmdletSnapin100
@@ -42,21 +40,20 @@ $remote = [scriptblock]::Create(@"
 
     # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
     $WarningPreference = "silentlyContinue"
-    filter timestamp {"$(Get-Date -Format G): $_"}
     try {
         $dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q $using:query_enum -h -1
         foreach ($db in $dbs) {
             $newquery = $using:query -replace "USE \[EGE_TARGET\]","USE [$db]"
-            Write-Output "Starting Database: $db" | timestamp
+            Write-Output "Starting Database: $db"
             Invoke-Sqlcmd -Username cvent -Password n0rth -Query $newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
-            Write-Output "Completed Database: $db" | timestamp
+            Write-Output "Completed Database: $db"
         }
     } catch {
         $errormessage = "ERROR: $_"
         Write-Error $errormessage
     }
 
-    Write-Output "Completed Node: $env:_address_" | timestamp
+    Write-Output "Completed Node: $env:_address_"
 
 "@)
 
