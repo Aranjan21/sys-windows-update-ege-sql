@@ -82,7 +82,7 @@ def call(def base) {
             ps_script,
             base.get_cred_id(list_of_ege_servers[i]),
             [
-                '_address_': list_of_ege_servers[i]
+                '_address_': list_of_ege_servers[i],
                 '_sql_': sql_script['message']
             ]
         )
