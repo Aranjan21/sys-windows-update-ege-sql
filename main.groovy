@@ -18,7 +18,7 @@ def call(def base) {
     }
     */
 
-    def result = ''
+    // def result = ''
 
     /* Find the servers that the script needs run against
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
