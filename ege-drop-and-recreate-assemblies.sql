@@ -1,14 +1,14 @@
 /* This script should be executed on EGE target server for your silo. DO NOT execute in your silo because it wont work. EGE target DB is on Target server, your silo is a initiator from where emails are queued not a traget. If you follow wiki, you will know how to find target server*/
 
-USE [EGE_TARGET] --Replace db name with designated target for your silo ex, EGE_TARGET_ap_403 for silo 403
+USE [EGE_TARGET] /* Replace db name with designated target for your silo ex, EGE_TARGET_ap_403 for silo 403 */
 GO
 
---Drop procedure
+/* Drop procedure */
 
 DROP PROCEDURE [dbo].[up_ege_ProcessEmailBatchTargetQueue]
 GO
 
---Dropping assemblies
+/* Dropping assemblies */
 
 DROP ASSEMBLY [Cvent.Ege.Distributor.Clr]
 GO
@@ -17,7 +17,7 @@ DROP ASSEMBLY [System.Messaging]
 DROP ASSEMBLY [System.Web]
 DROP ASSEMBLY [SMDiagnostics]
 
---Recreate assemblies
+/* Recreate assemblies */
 
 CREATE ASSEMBLY [SMDiagnostics]
 AUTHORIZATION [dbo]
@@ -79,7 +79,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'SqlAssemblyProjectRoot', @value=N'C:\CventApp\Dev\Modules\Cvent.Ege.Distributor\Cvent.Ege.Distributor.Clr' , @level0type=N'ASSEMBLY',@level0name=N'Cvent.Ege.Distributor.Clr'
 GO
 
---Recreate procedure
+/* Recreate procedure */
 
 USE [EGE_TARGET]
 GO
