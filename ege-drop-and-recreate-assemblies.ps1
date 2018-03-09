@@ -15,6 +15,8 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 # be mindful that special characters such as $ will be expanded by the Windows slave
 # Therefore, some (not all) of those characters require escaping with `
 
+Write-Output "outside of PS remote"
+
 $remote = [scriptblock]::Create(@"
     Write-Output "we are inside the powershell script now!"
     $query = $env:_sql_
@@ -24,14 +26,6 @@ $remote = [scriptblock]::Create(@"
     "@
 
     Write-Output "Starting Run"
-
-    $live = Test-Connection -Computername $env:_address_ -BufferSize 16 -Count 1 -Quiet
-    if ($live) {
-        $s = New-PSSession -ComputerName $env:_address_
-    } else {
-        Write-Output "$env:_address_ is not available, skipping."
-        continue
-    }
 
     Write-Output "Starting Node: $env:_address_"
 

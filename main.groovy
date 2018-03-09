@@ -54,7 +54,7 @@ def call(def base) {
     list_of_ege_servers = list_of_ege_servers.reverse()
 
 
-    /* Read the PowerSheel file for the workflow */
+    /* Read the PowerShell file for the workflow */
 
     // list_of_ege_servers = ['ap20-ege-101']
     this_base.log("getting SQL file")
@@ -79,10 +79,10 @@ def call(def base) {
 
     /* Run the PowerShell script */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-        output = this_base.run_powershell(
+        recreate_assembly = this_base.run_powershell(
             "Attempting to drop and recreate assemblies on ${list_of_ege_servers[i]}",
             ps_script,
-            base.get_cred_id(list_of_ege_servers[i]),
+            this_base.get_cred_id(list_of_ege_servers[i]),
             [
                 '_address_': list_of_ege_servers[i],
                 '_sql_': sql_script
