@@ -17,6 +17,10 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 
 $remote = [scriptblock]::Create(@"
     Write-Output "we are inside the powershell script now!"
+    # Adding in the SQL Snapins so we can leverage Invoke-Sqlcmd
+    Add-PSSnapin SqlServerCmdletSnapin100
+    Add-PSSnapin SqlServerProviderSnapin100
+    
     $query = $env:_sql_
     $query_enum = @"
     SET NOCOUNT ON
@@ -26,10 +30,6 @@ $remote = [scriptblock]::Create(@"
     Write-Output "Starting Run"
 
     Write-Output "Starting Node: $env:_address_"
-
-    # Adding in the SQL Snapins so we can leverage Invoke-Sqlcmd
-    Add-PSSnapin SqlServerCmdletSnapin100
-    Add-PSSnapin SqlServerProviderSnapin100
 
     # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
     $WarningPreference = "silentlyContinue"
