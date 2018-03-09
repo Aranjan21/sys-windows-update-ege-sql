@@ -16,6 +16,7 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 # Therefore, some (not all) of those characters require escaping with `
 
 $remote = [scriptblock]::Create(@"
+    Write-Output "we are inside the powershell script now!"
     $query = $env:_sql_
     $query_enum = @"
     SET NOCOUNT ON
