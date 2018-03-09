@@ -13,9 +13,7 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 
 # When building the script that will execute on the remote Windows machine,
 # be mindful that special characters such as $ will be expanded by the Windows slave
-# Therefore, some (not all) of those characters require escaping with `
-
-Write-Output "outside of PS remote"
+# Therefore, some (not all) of those characters require escaping with
 
 $remote = [scriptblock]::Create(@"
     Write-Output "we are inside the powershell script now!"
