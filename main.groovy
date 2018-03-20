@@ -59,13 +59,11 @@ def call(def base) {
     // list_of_ege_servers = ['ap20-ege-101']
     this_base.log("getting SQL file")
 
-    /*
     def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
 
     if(sql_script['response'] == 'error'){
         return sql_script
     }
-    */
 
     this_base.log("getting PS file")
 
@@ -76,7 +74,7 @@ def call(def base) {
     }
 
     ps_script = ps_script['message']
-    // sql_script = sql_script['message']
+    sql_script = sql_script['message']
 
     /* Run the PowerShell script */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
@@ -85,8 +83,8 @@ def call(def base) {
             ps_script,
             this_base.get_cred_id(list_of_ege_servers[i]),
             [
-                '_address_': list_of_ege_servers[i]
-                // '_sql_': sql_script
+                '_address_': list_of_ege_servers[i],
+                '_sql_': sql_script
             ]
         )
     }
