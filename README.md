@@ -3,7 +3,7 @@
 Created by: Anthony Gaetano AGaetano@cvent.com  
   
 ## Description  
-  
+The necessity of this job comes from Windows patching consistently breaking SQL on the EGE nodes. See the Jira ticket below for more details:
 https://jira.cvent.com/browse/ITNOC-167  
   
 ## CLI Example  
