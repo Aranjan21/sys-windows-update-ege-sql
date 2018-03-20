@@ -27,7 +27,7 @@ $remote = [scriptblock]::Create(@"
     select name from sys.databases where name like 'EGE_TARGET%'
     "@
 
-    Write-Output "Starting Run"
+    Write-Output "Starting Script"
 
     Write-Output "Starting Node: $env:_address_"
 
