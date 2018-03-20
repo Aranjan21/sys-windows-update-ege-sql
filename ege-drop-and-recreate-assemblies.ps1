@@ -22,10 +22,7 @@ $remote = [scriptblock]::Create(@"
     Add-PSSnapin SqlServerProviderSnapin100
     
     `$query = $env:_sql_
-    `$query_enum = @"
-    SET NOCOUNT ON
-    select name from sys.databases where name like 'EGE_TARGET%'
-    "@
+    `$query_enum = "SET NOCOUNT ON;select name from sys.databases where name like 'EGE_TARGET%'"
 
     Write-Output "Starting Script"
 
