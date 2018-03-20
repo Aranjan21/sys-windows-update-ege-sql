@@ -59,7 +59,7 @@ def call(def base) {
     // list_of_ege_servers = ['ap20-ege-101']
     this_base.log("getting SQL file")
 
-    def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.txt')
+    def sql_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.sql')
 
     if(sql_script['response'] == 'error'){
         return sql_script
