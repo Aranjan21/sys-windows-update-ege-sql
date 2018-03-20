@@ -21,8 +21,8 @@ $remote = [scriptblock]::Create(@"
     Add-PSSnapin SqlServerCmdletSnapin100
     Add-PSSnapin SqlServerProviderSnapin100
     
-    $query = $env:_sql_
-    $query_enum = @"
+    `$query = $env:_sql_
+    `$query_enum = @"
     SET NOCOUNT ON
     select name from sys.databases where name like 'EGE_TARGET%'
     "@
@@ -32,18 +32,18 @@ $remote = [scriptblock]::Create(@"
     Write-Output "Starting Node: $env:_address_"
 
     # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
-    $WarningPreference = "silentlyContinue"
+    `$WarningPreference = "silentlyContinue"
     try {
-        $dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q $using:query_enum -h -1
-        foreach ($db in $dbs) {
-            $newquery = $using:query -replace "USE \[EGE_TARGET\]","USE [$db]"
-            Write-Output "Starting Database: $db"
-            Invoke-Sqlcmd -Username cvent -Password n0rth -Query $newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
-            Write-Output "Completed Database: $db"
+        `$dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q `$using:query_enum -h -1
+        foreach (`$db in `$dbs) {
+            `$newquery = `$using:query -replace "USE \[EGE_TARGET\]","USE [`$db]"
+            Write-Output "Starting Database: `$db"
+            Invoke-Sqlcmd -Username cvent -Password n0rth -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
+            Write-Output "Completed Database: `$db"
         }
     } catch {
-        $errormessage = "ERROR: $_"
-        Write-Error $errormessage
+        `$errormessage = "ERROR: `$_"
+        Write-Error `$errormessage
     }
 
     Write-Output "Completed Node: $env:_address_"
