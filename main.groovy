@@ -108,10 +108,8 @@ def call(def base) {
         }
     }
 
-    output['message'] = successful_databases
-
     output['response'] = 'ok'
-    output['message'] = dbas.size()
+    output['message'] = successful_databases
     return output
 }
 /*
