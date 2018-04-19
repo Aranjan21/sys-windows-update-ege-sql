@@ -21,7 +21,7 @@ $remote = [scriptblock]::Create(@"
     Add-PSSnapin SqlServerCmdletSnapin100
     Add-PSSnapin SqlServerProviderSnapin100
     
-    `$query = [IO.File]::ReadAllText("D:\tedtest\EGE_drop_and_recreate_assemblies.sql")
+    `$query = [IO.File]::ReadAllText("D:\sqltest\EGE_drop_and_recreate_assemblies.sql")
     `$query_enum = "SET NOCOUNT ON;select name from sys.databases where name like 'EGE_TARGET%'"
 
     Write-Output "Starting Script"
