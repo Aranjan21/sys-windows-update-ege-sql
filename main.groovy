@@ -68,8 +68,7 @@ def call(def base) {
             [
                 '_address_': list_of_ege_servers[i],
             ]
-        )
-    }
+    )
 /*
     this_base.log("getting PS file")
 
