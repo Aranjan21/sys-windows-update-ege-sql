@@ -64,9 +64,9 @@ def call(def base) {
     host_dbs = this_base.run_powershell(
         "Attempting to get the databases from the machine",
         get_dbs,
-        this_base.get_cred_id(list_of_ege_servers[i]),
+        this_base.get_cred_id(list_of_ege_servers[0]),
             [
-                '_address_': list_of_ege_servers[i],
+                '_address_': list_of_ege_servers[0],
             ]
     )
 /*
