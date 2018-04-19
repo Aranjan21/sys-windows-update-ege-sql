@@ -16,14 +16,14 @@ $ps_session = New-PSSession -ComputerName $env:_address_ -Credential $my_creds -
 # Therefore, some (not all) of those characters require escaping with
 
 $remote = [scriptblock]::Create(@"
-    Write-Output "we are inside the powershell script now!"
     # Adding in the SQL Snapins so we can leverage Invoke-Sqlcmd
     Add-PSSnapin SqlServerCmdletSnapin100
     Add-PSSnapin SqlServerProviderSnapin100
 
     `$query_enum = "SET NOCOUNT ON;select name from sys.databases where name like 'EGE_TARGET%'"
+    `$dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q `$query_enum -h -1
 
-    Write-Output "`$query_enum"
+    Write-Output "`$dbs"
 
 "@)
 
