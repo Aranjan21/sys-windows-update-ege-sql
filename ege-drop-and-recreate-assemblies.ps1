@@ -34,7 +34,6 @@ $remote = [scriptblock]::Create(@"
         Write-Output "Starting Database: $env:_database_"
         Invoke-Sqlcmd -Username cvent -Password n0rth -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
         Write-Output "Completed Database: $env:_database_"
-        }
     } catch {
         `$errormessage = "ERROR: `$_"
         Write-Error `$errormessage
