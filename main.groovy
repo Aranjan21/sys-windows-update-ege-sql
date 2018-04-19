@@ -57,6 +57,20 @@ def call(def base) {
     Read the PowerShell file for the workflow */
 
     list_of_ege_servers = ['ap20-ege-101']
+
+    this_base.log("getting the databases from the server")
+    def get_dbs = this_base.run_powershell('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
+
+    host_dbs = this_base.run_powershell(
+        "Attempting to get the databases from the machine",
+        get_dbs,
+        this_base.get_cred_id(list_of_ege_servers[i]),
+            [
+                '_address_': list_of_ege_servers[i],
+            ]
+        )
+    }
+/*
     this_base.log("getting PS file")
 
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
@@ -67,7 +81,7 @@ def call(def base) {
 
     ps_script = ps_script['message']
 
-    /* Run the PowerShell script */
+    /* Run the PowerShell script
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
         recreate_assembly = this_base.run_powershell(
             "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
@@ -77,7 +91,9 @@ def call(def base) {
                 '_address_': list_of_ege_servers[i],
             ]
         )
-    }
+    } */
+
+    output['message'] = host_dbs
 
     return output
 }
