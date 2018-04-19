@@ -58,40 +58,48 @@ def call(def base) {
 
     list_of_ege_servers = ['ap20-ege-101']
 
-    this_base.log("getting the databases from the server")
-    def get_dbs = this_base.read_wf_file('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
-    get_dbs = get_dbs['message']
-
-    host_dbs = this_base.run_powershell(
-        "Attempting to get the databases from the machine",
-        get_dbs,
-        this_base.get_cred_id(list_of_ege_servers[0]),
-            [
-                '_address_': list_of_ege_servers[0],
-            ]
-    )
-
-    if (host_dbs['response'] == 'error') {
-        return host_dbs
-    }
-
-    def dbas = host_dbs['message'].replace(' ', '').split('\r\n')
-
     this_base.log("getting PS file")
 
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
 
-    if(ps_script['response'] == 'error'){
+    if (ps_script['response'] == 'error') {
         return ps_script
     }
 
     ps_script = ps_script['message']
 
+    def get_dbs = this_base.read_wf_file('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
+
+    if (get_dbs['response'] == 'error') {
+        return get_dbs
+    }
+
+    get_dbs = get_dbs['message']
+
+    def dbas = []
     def successful_databases = []
 
     /* Run the PowerShell script */
     /* Loop for servers */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
+        this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
+
+        host_dbs = this_base.run_powershell(
+            "Attempting to get the databases from the machine",
+            get_dbs,
+            this_base.get_cred_id(list_of_ege_servers[0]),
+                [
+                    '_address_': list_of_ege_servers[0],
+                ]
+        )
+
+        if (host_dbs['response'] == 'error') {
+            return host_dbs
+        }
+
+        dbas = host_dbs['message'].replace(' ', '').split('\r\n')
+
+
         /* Loop for dbas on the ege */
         for (Integer j = 0; j < dbas.size(); j++) {
             recreate_assembly = this_base.run_powershell(
