@@ -23,7 +23,7 @@ $remote = [scriptblock]::Create(@"
     `$query_enum = "SET NOCOUNT ON;select name from sys.databases where name like 'EGE_TARGET%'"
     `$dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q `$query_enum -h -1
 
-    Write-Output `$dbs
+    Write-Output `$dbs.replace(' ', '').split('\n')
 
 "@)
 
