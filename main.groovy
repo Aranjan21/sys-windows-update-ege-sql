@@ -88,8 +88,8 @@ def call(def base) {
     ps_script = ps_script['message']
 
     def successful_databases = {
-        'response' : 'error',
-        'message' : {}
+        'response': 'error',
+        'message': {:}
     }
 
     /* Run the PowerShell script */
