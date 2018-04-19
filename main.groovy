@@ -93,7 +93,7 @@ def call(def base) {
         )
     } */
 
-    def dbas = host_dbs['message'].split('\r\n')
+    def dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
     output['message'] = dbas
 
