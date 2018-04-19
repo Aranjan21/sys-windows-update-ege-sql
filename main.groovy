@@ -71,7 +71,7 @@ def call(def base) {
             ]
     )
 
-    if host_dbs['response'] == 'error' {
+    if (host_dbs['response'] == 'error') {
         return host_dbs
     }
 
