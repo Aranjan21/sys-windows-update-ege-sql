@@ -22,7 +22,6 @@ $remote = [scriptblock]::Create(@"
     Add-PSSnapin SqlServerProviderSnapin100
 
     `$query = [IO.File]::ReadAllText("D:\sqltest\EGE_drop_and_recreate_assemblies.sql")
-    `$query_enum = "SET NOCOUNT ON;select name from sys.databases where name like 'EGE_TARGET%'"
 
     Write-Output "Starting Script"
 
@@ -31,7 +30,7 @@ $remote = [scriptblock]::Create(@"
     # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
     `$WarningPreference = "silentlyContinue"
     try {
-        `$dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q `$query_enum -h -1
+        `$dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q $env:_database_ -h -1
         foreach (`$db in `$dbs) {
             `$newquery = `$query -replace "USE \[EGE_TARGET\]","USE [`$db]"
             Write-Output "Starting Database: `$db"

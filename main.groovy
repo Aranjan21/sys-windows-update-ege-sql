@@ -88,12 +88,12 @@ def call(def base) {
     ps_script = ps_script['message']
 
     def successful_databases = []
-/*
-    /* Run the PowerShell script
-    /* Loop for servers
+
+    /* Run the PowerShell script */
+    /* Loop for servers */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-        /* Loop for dbas on the ege
-        for (Integer = j = 0; j < dbas.size(); j++) {
+        /* Loop for dbas on the ege */
+        for (Integer j = 0; j < dbas.size(); j++) {
             recreate_assembly = this_base.run_powershell(
                 "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
                 ps_script,
@@ -112,7 +112,6 @@ def call(def base) {
     }
 
     output['message'] = successful_databases
-*/
 
     output['message'] = dbas.size()
     return output
