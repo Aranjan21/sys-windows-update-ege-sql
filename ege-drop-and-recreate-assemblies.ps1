@@ -33,7 +33,7 @@ $remote = [scriptblock]::Create(@"
     try {
         `$dbs = sqlcmd -U cvent -P n0rth -S "localhost,50000" -Q `$query_enum -h -1
         foreach (`$db in `$dbs) {
-            `$newquery = `$using:query -replace "USE \[EGE_TARGET\]","USE [`$db]"
+            `$newquery = `$query -replace "USE \[EGE_TARGET\]","USE [`$db]"
             Write-Output "Starting Database: `$db"
             Invoke-Sqlcmd -Username cvent -Password n0rth -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
             Write-Output "Completed Database: `$db"
