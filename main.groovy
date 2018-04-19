@@ -79,7 +79,7 @@ def call(def base) {
     /* Run the PowerShell script */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
         recreate_assembly = this_base.run_powershell(
-            "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}''",
+            "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
             ps_script,
             this_base.get_cred_id(list_of_ege_servers[i]),
             [
