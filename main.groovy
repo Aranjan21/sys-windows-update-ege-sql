@@ -70,7 +70,13 @@ def call(def base) {
                 '_address_': list_of_ege_servers[0],
             ]
     )
-/*
+
+    if host_dbs['response'] == 'error' {
+        return host_dbs
+    }
+
+    def dbas = host_dbs['message'].replace(' ', '').split('\r\n')
+
     this_base.log("getting PS file")
 
     def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
@@ -81,21 +87,34 @@ def call(def base) {
 
     ps_script = ps_script['message']
 
-    /* Run the PowerShell script
+    def successful_databases = {
+        'response' : 'error',
+        'message' : {}
+    }
+
+    /* Run the PowerShell script */
+    /* Loop for servers */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-        recreate_assembly = this_base.run_powershell(
-            "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
-            ps_script,
-            this_base.get_cred_id(list_of_ege_servers[i]),
-            [
-                '_address_': list_of_ege_servers[i],
-            ]
-        )
-    } */
+        /* Loop for dbas on the ege */
+        for (Integer = j = 0; j < dbas.size(); j++) {
+            recreate_assembly = this_base.run_powershell(
+                "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
+                ps_script,
+                this_base.get_cred_id(list_of_ege_servers[i]),
+                [
+                    '_address_' : list_of_ege_servers[i],
+                    '_database_' : dbas[j]
+                ]
+            )
+            if (recreate_assembly['response'] == 'error') {
+                return recreate_assembly
+            }
 
-    def dbas = host_dbs['message'].replace(' ', '').split('\r\n')
+            successful_databases['message'][list_of_ege_servers[i]] += dbas[j]
+        }
+    }
 
-    output['message'] = dbas
+    output['message'] = successful_databases
 
     return output
 }
