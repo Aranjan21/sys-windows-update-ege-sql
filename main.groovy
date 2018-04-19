@@ -95,14 +95,7 @@ def call(def base) {
 
     host_dbs = host_dbs.split('\r\n')
 
-    output['message'] = [
-        'EGE_TARGET_ap_450',
-        'EGE_TARGET_ap_452',
-        'EGE_TARGET_ap_454',
-        'EGE_TARGET_ap_456',
-        'EGE_TARGET_ap_458',
-        'EGE_TARGET_ap_500'
-    ]
+    output['message'] = host_dbs
 
     return output
 }
