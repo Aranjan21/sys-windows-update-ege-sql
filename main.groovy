@@ -60,6 +60,7 @@ def call(def base) {
 
     this_base.log("getting the databases from the server")
     def get_dbs = this_base.read_wf_file('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
+    get_dbs = get_dbs['message']
 
     host_dbs = this_base.run_powershell(
         "Attempting to get the databases from the machine",
