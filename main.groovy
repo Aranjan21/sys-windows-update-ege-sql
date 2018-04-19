@@ -66,7 +66,6 @@ def call(def base) {
     }
 
     ps_script = ps_script['message']
-    sql_script = sql_script['message']
 
     /* Run the PowerShell script */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
