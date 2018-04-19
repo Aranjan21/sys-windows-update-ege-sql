@@ -103,9 +103,6 @@ def call(def base) {
                     '_database_' : dbas[j]
                 ]
             )
-            if (recreate_assembly['response'] == 'error') {
-                return recreate_assembly
-            }
 
             successful_databases += dbas[j]
         }
@@ -113,6 +110,7 @@ def call(def base) {
 
     output['message'] = successful_databases
 
+    output['response'] = 'ok'
     output['message'] = dbas.size()
     return output
 }
