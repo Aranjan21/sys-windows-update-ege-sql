@@ -59,7 +59,7 @@ def call(def base) {
     list_of_ege_servers = ['ap20-ege-101']
 
     this_base.log("getting the databases from the server")
-    def get_dbs = this_base.run_powershell('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
+    def get_dbs = this_base.read_wf_file('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
 
     host_dbs = this_base.run_powershell(
         "Attempting to get the databases from the machine",
