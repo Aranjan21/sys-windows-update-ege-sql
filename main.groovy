@@ -111,13 +111,18 @@ def call(def base) {
                     '_database_' : dbas[j]
                 ]
             )
-
-            successful_databases += dbas[j]
         }
+
+        successful_databases += list_of_ege_servers[i]
+    }
+
+    if (successful_databases != list_of_ege_servers) {
+        output['message'] = 'not all of the servers completed successfully'
     }
 
     output['response'] = 'ok'
     output['message'] = successful_databases
+
     return output
 }
 /*
