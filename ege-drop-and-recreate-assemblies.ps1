@@ -25,22 +25,18 @@ $remote = [scriptblock]::Create(@"
 
     Write-Output "Starting Script"
 
-    Write-Output "Starting Node: $env:_address_"
-
     # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
     `$WarningPreference = "silentlyContinue"
     try {
         `$newquery = `$query -replace "USE \[EGE_TARGET\]","USE [$env:_database_]"
         Write-Output "Starting Database: $env:_database_"
         Invoke-Sqlcmd -Username cvent -Password n0rth -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
-        Write-Output "Completed Database: $env:_database_"
     } catch {
         `$errormessage = "ERROR: `$_"
         Write-Error `$errormessage
     }
 
-    Write-Output "Completed Node: $env:_address_"
-
+    Write-Output "Completed Database: $env:_database_"
 "@)
 
 # Execute the script on the remote Windows machine
