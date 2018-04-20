@@ -20,7 +20,7 @@ def call(def base) {
 
     def result = ''
 
-    /* Find the servers that the script needs run against
+    /* Find the servers that the script needs run against */
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
     def list_of_vms = ''
 
@@ -51,10 +51,7 @@ def call(def base) {
         }
     }
 
-    list_of_ege_servers = list_of_ege_servers.reverse()
-
-
-    Read the PowerShell file for the workflow */
+    /* Read the PowerShell file for the workflow */
 
     list_of_ege_servers = ['ap20-ege-101']
 
