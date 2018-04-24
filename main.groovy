@@ -95,8 +95,8 @@ def call(def base) {
 
         dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
 
-        withCredentials([[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]) {
-            /* def creds = (${env['__jenkins_cli_ops_bot__']}).split(" ") */
+        withCredentials([[$class: 'StringBinding', credentialsId: 'jenkins_main', variable: '__headerAuth__']]) {
+            def creds = (${env['__headerAuth__']}).split(" ")
             /* Loop for dbas on the ege
             for (Integer j = 0; j < dbas.size(); j++) {
                 recreate_assembly = this_base.run_powershell(
@@ -121,7 +121,7 @@ def call(def base) {
     output['response'] = 'ok'
     output['message'] = successful_databases
     */
-    output['message'] = 'passed'
+    output['message'] = creds
     return output
 }
 /*
