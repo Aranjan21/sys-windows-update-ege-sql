@@ -119,7 +119,7 @@ def call(def base) {
                     '__lower_region_databases_password__' : password
                 ]
             )
-        } */
+        }
 
         /* successful_databases += list_of_ege_servers[i] */
     }
