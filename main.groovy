@@ -95,10 +95,18 @@ def call(def base) {
 
         dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
 
-        def creds = [[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]
+        def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'lower_region_databases', usernameVariable: '__lower_region_databases_username__', passwordVariable: '__lower_region_databases_password__']]
 
+        String username = ''
+        String password = ''
+        node('!master && domain:core.cvent.org') {
+            withCredentials(creds) {
+                username = env['__lower_region_databases_username__']
+                password = env['__lower_region_databases_password__']
+            }
+        }
 
-        /* Loop for dbas on the ege
+        /* Loop for dbas on the ege */
         for (Integer j = 0; j < dbas.size(); j++) {
             recreate_assembly = this_base.run_powershell(
                 "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
@@ -106,7 +114,9 @@ def call(def base) {
                 this_base.get_cred_id(list_of_ege_servers[i]),
                 [
                     '_address_' : list_of_ege_servers[i],
-                    '_database_' : dbas[j]
+                    '_database_' : dbas[j],
+                    '__lower_region_databases_username__' : username,
+                    '__lower_region_databases_password__' : password
                 ]
             )
         } */
