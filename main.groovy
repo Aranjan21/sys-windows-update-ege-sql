@@ -96,9 +96,8 @@ def call(def base) {
         dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
 
         def creds = [[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]
-        withCredentials(creds) {
-            output['message'] = creds['variable']            
-        }
+
+        output['message'] = creds['variable']
         /* Loop for dbas on the ege
         for (Integer j = 0; j < dbas.size(); j++) {
             recreate_assembly = this_base.run_powershell(
