@@ -97,9 +97,6 @@ def call(def base) {
 
         def creds = [[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]
 
-        withCredentials(creds) {
-            output['message'] = creds['variable'].toString()
-        }
 
         /* Loop for dbas on the ege
         for (Integer j = 0; j < dbas.size(); j++) {
