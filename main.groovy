@@ -97,6 +97,7 @@ def call(def base) {
 
         withCredentials([[$class: 'StringBinding', credentialsId: 'jenkins_main', variable: '__headerAuth__']]) {
             def creds = [['name': 'Authorization', 'value': "Basic ${env['__jenkins_cli_ops_bot__']}"]]
+            output['message'] = creds
             /* Loop for dbas on the ege
             for (Integer j = 0; j < dbas.size(); j++) {
                 recreate_assembly = this_base.run_powershell(
@@ -121,7 +122,7 @@ def call(def base) {
     output['response'] = 'ok'
     output['message'] = successful_databases
     */
-    output['message'] = creds
+
     return output
 }
 /*
