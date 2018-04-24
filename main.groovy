@@ -75,7 +75,7 @@ def call(def base) {
     def successful_databases = []
 
     /* Run the PowerShell script
-    /* Loop for servers
+    /* Loop for servers */
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
         this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
@@ -92,7 +92,7 @@ def call(def base) {
             return host_dbs
         }
 
-        dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
+        dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
         withCredentials([[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]) {
             def creds = [['name': 'Authorization', 'value': "Basic ${env['__jenkins_cli_ops_bot__']}"]]
