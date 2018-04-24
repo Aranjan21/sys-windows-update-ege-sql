@@ -94,31 +94,33 @@ def call(def base) {
 
         dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
-
-        /* Loop for dbas on the ege */
-        for (Integer j = 0; j < dbas.size(); j++) {
-            recreate_assembly = this_base.run_powershell(
-                "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
-                ps_script,
-                this_base.get_cred_id(list_of_ege_servers[i]),
-                [
-                    '_address_' : list_of_ege_servers[i],
-                    '_database_' : dbas[j]
-                ]
-            )
+        withCredentials([[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]) {
+            def creds = ${env['__lower_region_databases__']}
+            /* Loop for dbas on the ege
+            for (Integer j = 0; j < dbas.size(); j++) {
+                recreate_assembly = this_base.run_powershell(
+                    "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
+                    ps_script,
+                    this_base.get_cred_id(list_of_ege_servers[i]),
+                    [
+                        '_address_' : list_of_ege_servers[i],
+                        '_database_' : dbas[j]
+                    ]
+                )
+            } */
         }
 
-        successful_databases += list_of_ege_servers[i]
+        /* successful_databases += list_of_ege_servers[i] */
     }
-
+    /*
     if (successful_databases != list_of_ege_servers) {
         output['message'] = 'not all of the servers completed successfully'
     }
 
     output['response'] = 'ok'
     output['message'] = successful_databases
-
-    return output
+    */
+    return creds
 }
 /*
 def input_validation() {
