@@ -76,6 +76,7 @@ def call(def base) {
 
     /* Run the PowerShell script
     /* Loop for servers */
+    def list_of_ege_servers = ['delete', 'me']
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
         /* this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
