@@ -95,22 +95,20 @@ def call(def base) {
 
         dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
 
-        withCredentials([[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]) {
-            def creds = env['__lower_region_databases__']
-            output['message'] = creds
-            /* Loop for dbas on the ege
-            for (Integer j = 0; j < dbas.size(); j++) {
-                recreate_assembly = this_base.run_powershell(
-                    "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
-                    ps_script,
-                    this_base.get_cred_id(list_of_ege_servers[i]),
-                    [
-                        '_address_' : list_of_ege_servers[i],
-                        '_database_' : dbas[j]
-                    ]
-                )
-            } */
-        }
+        def creds = [[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]
+        output['message'] = creds
+        /* Loop for dbas on the ege
+        for (Integer j = 0; j < dbas.size(); j++) {
+            recreate_assembly = this_base.run_powershell(
+                "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
+                ps_script,
+                this_base.get_cred_id(list_of_ege_servers[i]),
+                [
+                    '_address_' : list_of_ege_servers[i],
+                    '_database_' : dbas[j]
+                ]
+            )
+        } */
 
         /* successful_databases += list_of_ege_servers[i] */
     }
