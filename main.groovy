@@ -20,7 +20,7 @@ def call(def base) {
 
     def result = ''
 
-    /* Find the servers that the script needs run against
+    /* Find the servers that the script needs run against */
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
     def list_of_vms = ''
 
@@ -51,7 +51,7 @@ def call(def base) {
         }
     }
 
-    /* Read the PowerShell file for the workflow
+    /* Read the PowerShell file for the workflow */
 
     this_base.log("getting PS file")
 
@@ -74,11 +74,11 @@ def call(def base) {
     def dbas = []
     def successful_databases = []
 
-    /* Run the PowerShell script
+    /* Run the PowerShell script */
     /* Loop for servers */
     def list_of_ege_servers = ['delete', 'me']
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-        /* this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
+        this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
         host_dbs = this_base.run_powershell(
             "Attempting to get the databases from the machine",
@@ -93,7 +93,7 @@ def call(def base) {
             return host_dbs
         }
 
-        dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
+        dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
         def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'lower_region_databases', usernameVariable: '__lower_region_databases_username__', passwordVariable: '__lower_region_databases_password__']]
 
@@ -121,16 +121,16 @@ def call(def base) {
             )
         }
 
-        /* successful_databases += list_of_ege_servers[i] */
+        successful_databases += list_of_ege_servers[i]
     }
-    /*
+
     if (successful_databases != list_of_ege_servers) {
         output['message'] = 'not all of the servers completed successfully'
     }
 
     output['response'] = 'ok'
     output['message'] = successful_databases
-    */
+
 
     return output
 }
