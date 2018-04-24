@@ -20,7 +20,7 @@ def call(def base) {
 
     def result = ''
 
-    /* Find the servers that the script needs run against */
+    /* Find the servers that the script needs run against
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
     def list_of_vms = ''
 
@@ -51,7 +51,7 @@ def call(def base) {
         }
     }
 
-    /* Read the PowerShell file for the workflow */
+    /* Read the PowerShell file for the workflow
 
     this_base.log("getting PS file")
 
@@ -74,8 +74,8 @@ def call(def base) {
     def dbas = []
     def successful_databases = []
 
-    /* Run the PowerShell script */
-    /* Loop for servers */
+    /* Run the PowerShell script
+    /* Loop for servers
     for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
         this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
@@ -92,10 +92,10 @@ def call(def base) {
             return host_dbs
         }
 
-        dbas = host_dbs['message'].replace(' ', '').split('\r\n')
+        dbas = host_dbs['message'].replace(' ', '').split('\r\n') */
 
         withCredentials([[$class: 'StringBinding', credentialsId: 'lower_region_databases', variable: '__lower_region_databases__']]) {
-            def creds = ${env['__lower_region_databases__']}
+            def creds = [['name': 'Authorization', 'value': "Basic ${env['__jenkins_cli_ops_bot__']}"]]
             /* Loop for dbas on the ege
             for (Integer j = 0; j < dbas.size(); j++) {
                 recreate_assembly = this_base.run_powershell(
@@ -120,7 +120,8 @@ def call(def base) {
     output['response'] = 'ok'
     output['message'] = successful_databases
     */
-    return creds
+    output['message'] = creds
+    return output
 }
 /*
 def input_validation() {
