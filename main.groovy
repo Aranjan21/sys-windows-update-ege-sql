@@ -53,7 +53,7 @@ def call(def base) {
 
     Read the PowerShell file for the workflow */
 
-    list_of_ege_servers = ['ap20-ege=101']
+    list_of_ege_servers = ['ap20-ege-101']
 
     this_base.log("getting PS file")
 
