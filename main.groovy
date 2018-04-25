@@ -125,7 +125,7 @@ def call(def base) {
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
                 /* Update the change ticket with the databases that will be rebuilt */
-                base.update_chg_ticket_desc("${dbas}")
+                base.update_chg_ticket_desc("The following assemblies will be rebuilt: ${dbas}")
 
                 if (host_dbs['response'] == 'error') {
                     return host_dbs
@@ -150,7 +150,7 @@ def call(def base) {
                     }
 
                     /* Update the change ticket with the databases that was be rebuilt */
-                    base.update_chg_ticket_desc(recreate_assembly['message'])
+                    base.update_chg_ticket_desc("Completed Database ${dbas[j]}")
                 }
 
                 /* Update and close the change ticket after all assemblies have been rebuilt */
