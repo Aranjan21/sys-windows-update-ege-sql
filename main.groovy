@@ -12,7 +12,7 @@ def call(def base) {
 
     def result = ''
 
-    Find the servers that the script needs run against
+    /* Find the servers that the script needs run against */
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
     def list_of_vms = ''
 
@@ -43,10 +43,9 @@ def call(def base) {
         }
     }
 
-    /* Read the PowerShell file for the workflow */
-
+    /* Read the PowerShell files for the workflow */
     this_base.log("getting PS file")
-    def ps_script = this_base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
+    def ps_script = this_base.read_wf_file('sys-windows-update-ege-sql','ege-drop-and-recreate-assemblies.ps1')
 
     if (ps_script['response'] == 'error') {
         return ps_script
