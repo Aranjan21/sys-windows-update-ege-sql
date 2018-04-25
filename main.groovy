@@ -81,7 +81,7 @@ def call(def base) {
     /* Create the change ticket */
     def chg_desc = "Dropping and Recreating Assemblies"
     def chg_ticket = this_base.create_chg_ticket(
-        list_of_ege_servers[i],
+        list_of_ege_servers[0],
         "Drop and Recreate Assemblies on ${wf_region} EGE servers",
         chg_desc,
         '',
