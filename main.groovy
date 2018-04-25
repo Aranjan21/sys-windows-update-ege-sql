@@ -89,9 +89,7 @@ def call(def base) {
                     get_dbs,
                     this_base.get_cred_id(list_of_ege_servers[i]),
                         [
-                            '_address_' : list_of_ege_servers[i],
-                            '__lower_region_databases_username__' : usernameVariable,
-                            '__lower_region_databases_password__' : passwordVariable
+                            '_address_' : list_of_ege_servers[i]
                         ]
                 )
 
@@ -109,9 +107,7 @@ def call(def base) {
                         this_base.get_cred_id(list_of_ege_servers[i]),
                         [
                             '_address_' : list_of_ege_servers[i],
-                            '_database_' : dbas[j],
-                            '__lower_region_databases_username__' : usernameVariable,
-                            '__lower_region_databases_password__' : passwordVariable
+                            '_database_' : dbas[j]
                         ]
                     )
                 }
