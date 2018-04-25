@@ -89,7 +89,7 @@ def call(def base) {
     )
 
     if (chg_ticket['response'] == 'error') {
-        output['message'] = "FAILURE: the assemblies were not rebuilt on ${list_of_ege_servers[i]} beacuse the change ticket was not created successfully: ${chg_ticket['message']}"
+        output['message'] = "FAILURE: the assemblies were not rebuilt because the change ticket was not created successfully: ${chg_ticket['message']}"
         return output
     }
 
