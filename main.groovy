@@ -114,7 +114,7 @@ def call(def base) {
                     )
                 }
 
-                successful_databases += list_of_ege_servers[i] */
+                successful_databases += list_of_ege_servers[i]
             }
         }
     }
