@@ -78,26 +78,26 @@ def call(def base) {
         creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'p2_databse', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
     }
 
+    /* Create the change ticket */
+    def chg_desc = "Dropping and Recreating Assemblies"
+    def chg_ticket = this_base.create_chg_ticket(
+        list_of_ege_servers[i],
+        "Drop and Recreate Assemblies on ${wf_region} EGE servers",
+        chg_desc,
+        '',
+        wf_requester
+    )
+
+    if (chg_ticket['response'] == 'error') {
+        output['message'] = "FAILURE: the assemblies were not rebuilt on ${list_of_ege_servers[i]} beacuse the change ticket was not created successfully: ${chg_ticket['message']}"
+        return output
+    }
+
     node('!master && os:windows && domain:core.cvent.org') {
         withCredentials(creds) {
             /* Run the PowerShell script */
             /* Loop for servers */
             for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-
-                /* Create the change ticket */
-                def chg_desc = "Dropping and Recreating Assemblies"
-                def cheg_ticket = this_base.create_chg_ticket(
-                    list_of_ege_servers[i],
-                    "Drop and Recreate Assemblies on ${list_of_ege_servers[i]}",
-                    chg_desc,
-                    '',
-                    wf_requester
-                )
-
-                if (cheg_ticket['response'] == 'error') {
-                    output['message'] = "FAILURE: the assemblies were not rebuilt on ${list_of_ege_servers[i]} beacuse the change ticket was not created successfully: ${chg_ticket['message']}"
-                    return output
-                }
 
                 this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
@@ -124,10 +124,6 @@ def call(def base) {
                 /* Loop for dbas on the ege */
                 for (Integer j = 0; j < dbas.size(); j++) {
 
-                    /* Update the change ticket with the databases that was be rebuilt */
-                    time = this_base.get_time()
-                    this_base.update_chg_ticket_desc("${time} - Starting Database ${dbas[j]}")
-
                     recreate_assembly = this_base.run_powershell(
                         "Attempting to drop and recreate '${dbas[j]}' on '${list_of_ege_servers[i]}'",
                         ps_script,
@@ -147,11 +143,11 @@ def call(def base) {
 
                     /* Update the change ticket with the databases that was be rebuilt */
                     time = this_base.get_time()
-                    this_base.update_chg_ticket_desc("${time} - Completed Database ${dbas[j]}")
+                    this_base.update_chg_ticket_desc("${time} - ${dbas[j]} rebuild successful")
                 }
 
                 /* Update and close the change ticket after all assemblies have been rebuilt */
-                this_base.update_chg_ticket_desc("Completed rebuilds on ${list_of_ege_servers[i]}")
+                this_base.update_chg_ticket_desc("SUCCESS: All assembly rebuilds have completed successfully on ${list_of_ege_servers[i]}")
                 this_base.close_chg_ticket(true)
 
                 successful_databases += list_of_ege_servers[i]
