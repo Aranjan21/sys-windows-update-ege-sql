@@ -17,7 +17,7 @@ def call(def base) {
     def list_of_vms = ''
 
     for (Integer i = 0; i < vcenters.size(); i++) {
-        result = base.run_vmwarecli(
+        result = this_base.run_vmwarecli(
             'Getting list of all virtual machines in vCenter',
             "(get-vm).name -split '`n' | %{\$_.trim()}",
             vcenters[i],
@@ -45,8 +45,8 @@ def call(def base) {
 
     /* Read the PowerShell file for the workflow */
 
-    base.log("getting PS file")
-    def ps_script = base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
+    this_base.log("getting PS file")
+    def ps_script = this_base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
 
     if (ps_script['response'] == 'error') {
         return ps_script
@@ -54,7 +54,7 @@ def call(def base) {
 
     ps_script = ps_script['message']
 
-    def get_dbs = base.read_wf_file('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
+    def get_dbs = this_base.read_wf_file('sys-windows-update-ege-sql', 'get-ege-databases.ps1')
 
     if (get_dbs['response'] == 'error') {
         return get_dbs
@@ -87,7 +87,7 @@ def call(def base) {
 
                 /* Create the change ticket */
                 def chg_desc = "Dropping and Recreating Assemblies"
-                def cheg_ticket = base.create_chg_ticket(
+                def cheg_ticket = this_base.create_chg_ticket(
                     list_of_ege_servers[i],
                     "Drop and Recreate Assemblies on ${list_of_ege_servers[i]}",
                     chg_desc,
@@ -100,12 +100,12 @@ def call(def base) {
                     return output
                 }
 
-                base.log("getting the databases from '${list_of_ege_servers[i]}'")
+                this_baselog("getting the databases from '${list_of_ege_servers[i]}'")
 
-                host_dbs = base.run_powershell(
+                host_dbs = this_base.run_powershell(
                     "Attempting to get the databases from the machine",
                     get_dbs,
-                    base.get_cred_id(list_of_ege_servers[i]),
+                    this_base.get_cred_id(list_of_ege_servers[i]),
                         [
                             '_address_' : list_of_ege_servers[i]
                         ]
@@ -114,7 +114,7 @@ def call(def base) {
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
                 /* Update the change ticket with the databases that will be rebuilt */
-                base.update_chg_ticket_desc("The following assemblies will be rebuilt: ${dbas}")
+                this_base.update_chg_ticket_desc("The following assemblies will be rebuilt: ${dbas}")
 
                 if (host_dbs['response'] == 'error') {
                     return host_dbs
@@ -126,13 +126,13 @@ def call(def base) {
                 for (Integer j = 0; j < dbas.size(); j++) {
 
                     /* Update the change ticket with the databases that was be rebuilt */
-                    time =base.get_time()
-                    base.update_chg_ticket_desc("${time} - Starting Database ${dbas[j]}")
+                    time = this_base.get_time()
+                    this_base.update_chg_ticket_desc("${time} - Starting Database ${dbas[j]}")
 
-                    recreate_assembly = base.run_powershell(
+                    recreate_assembly = this_base.run_powershell(
                         "Attempting to drop and recreate '${dbas[j]}' on '${list_of_ege_servers[i]}'",
                         ps_script,
-                        base.get_cred_id(list_of_ege_servers[i]),
+                        this_base.get_cred_id(list_of_ege_servers[i]),
                         [
                             '_address_' : list_of_ege_servers[i],
                             '_database_' : dbas[j]
@@ -141,19 +141,19 @@ def call(def base) {
 
                     if (recreate_assembly['response'] == 'error') {
                         output['message'] = "FAILURE: ${dbas[j]} failed to successfully drop and rebuild"
-                        base.update_chg_ticket_desc(output['message'])
-                        base.close_chg_ticket(false)
+                        this_base.update_chg_ticket_desc(output['message'])
+                        this_base.close_chg_ticket(false)
                         return output
                     }
 
                     /* Update the change ticket with the databases that was be rebuilt */
-                    time =base.get_time()
-                    base.update_chg_ticket_desc("${time} - Completed Database ${dbas[j]}")
+                    time = this_base.get_time()
+                    this_base.update_chg_ticket_desc("${time} - Completed Database ${dbas[j]}")
                 }
 
                 /* Update and close the change ticket after all assemblies have been rebuilt */
-                base.update_chg_ticket_desc("Completed rebuilds on ${list_of_ege_servers[i]}")
-                base.close_chg_ticket(true)
+                this_base.update_chg_ticket_desc("Completed rebuilds on ${list_of_ege_servers[i]}")
+                this_base.close_chg_ticket(true)
 
                 successful_databases += list_of_ege_servers[i]
             }
