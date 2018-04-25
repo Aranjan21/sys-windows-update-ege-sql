@@ -95,7 +95,7 @@ def call(def base) {
                         ]
                 )
 
-                dbas = host_dbs['message'].replace(' ', '').split('\r\n')
+                dbas = host_dbs['message'] /* .replace(' ', '').split('\r\n') */
 
                 if (host_dbs['response'] == 'error') {
                     return host_dbs
