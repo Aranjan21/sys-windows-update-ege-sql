@@ -94,13 +94,13 @@ def call(def base) {
                             '_address_' : list_of_ege_servers[i]
                         ]
                 )
-
+/*
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
                 if (host_dbs['response'] == 'error') {
                     return host_dbs
                 }
-
+*/
 
 
                 /* Loop for dbas on the ege
@@ -120,13 +120,13 @@ def call(def base) {
             }
         }
     }
-
+/*
     if (successful_databases != list_of_ege_servers) {
         output['message'] = 'not all of the servers completed successfully'
     }
-
+*/
     output['response'] = 'ok'
-    output['message'] = dbas
+    output['message'] = host_dbs
 
 
     return output
