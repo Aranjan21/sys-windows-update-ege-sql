@@ -99,7 +99,7 @@ def call(def base) {
                     return output
                 }
 
-                this_baselog("getting the databases from '${list_of_ege_servers[i]}'")
+                this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
                 host_dbs = this_base.run_powershell(
                     "Attempting to get the databases from the machine",
