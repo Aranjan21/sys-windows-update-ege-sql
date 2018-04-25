@@ -30,7 +30,7 @@ $remote = [scriptblock]::Create(@"
     try {
         `$newquery = `$query -replace "USE \[EGE_TARGET\]","USE [$env:_database_]"
         Write-Output "Starting Database: $env:_database_"
-        Invoke-Sqlcmd -Username $env:__lower_region_databases_username__ -Password $env:__lower_region_databases_password__ -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
+        Invoke-Sqlcmd -Username $env:__database_username__ -Password $env:__database_password__ -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
     } catch {
         `$errormessage = "ERROR: `$_"
         Write-Error `$errormessage

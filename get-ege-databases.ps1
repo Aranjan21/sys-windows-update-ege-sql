@@ -21,7 +21,7 @@ $remote = [scriptblock]::Create(@"
     Add-PSSnapin SqlServerProviderSnapin100
 
     `$query_enum = "SET NOCOUNT ON;select name from sys.databases where name like 'EGE_TARGET%'"
-    `$dbs = sqlcmd -U $env:__lower_region_databases_username__ -P $env:__lower_region_databases_password__ -S "localhost,50000" -Q `$query_enum -h -1
+    `$dbs = Invoke-Sqlcmd -Username $env:__database_username__ -Password $env:__database_password__ -ServerInstance "localhost,50000" -Query `$query_enum -h -1
 
     Write-Output `$dbs
 

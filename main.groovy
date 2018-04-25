@@ -77,7 +77,17 @@ def call(def base) {
     def successful_databases = []
 
     /* get the database creds */
-    def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'lower_region_databases', usernameVariable: '__lower_region_databases_username__', passwordVariable: '__lower_region_databases_password__']]
+    if (wf_region == 'ap20') {
+        def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ap20_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
+    } else if (wf_region == 'sg20' || wf_region == 'ld01') {
+        def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ld01_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
+    } else if (wf_region == 'ts20') {
+        def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ts20_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
+    } else if (wf_region == 'ct50') {
+        def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ct50_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
+    } else if (wf_region == 'pr01' || wf_region == 'pr11') {
+        def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'p2_databse', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
+    }
 
     node('!master && os:windows && domain:core.cvent.org') {
         withCredentials(creds) {
