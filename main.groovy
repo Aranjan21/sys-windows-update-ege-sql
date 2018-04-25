@@ -95,6 +95,22 @@ def call(def base) {
             /* Run the PowerShell script */
             /* Loop for servers */
             for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
+
+                /* Create the change ticket */
+                def chg_desc = "Dropping and Recreating Assemblies on ${list_of_ege_servers[i]}"
+                def cheg_ticket = base.create_chg_ticket(
+                    list_of_ege_servers[i],
+                    "Drop and Recreate Assemblies",
+                    chg_desc,
+                    '',
+                    wf_requester
+                )
+
+                if (cheg_ticket['response'] == 'error') {
+                    output['message'] = "FAILURE: the assemblies were not rebuilt on ${list_of_ege_servers[i]} beacuse the change ticket was not created successfully: ${chg_ticket['message']}"
+                    return output
+                }
+
                 this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
                 host_dbs = this_base.run_powershell(
@@ -108,6 +124,9 @@ def call(def base) {
 
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
+                /* Update the change ticket with the databases that will be rebuilt */
+                base.update_chg_ticket_desc(dbas)
+
                 if (host_dbs['response'] == 'error') {
                     return host_dbs
                 }
@@ -115,7 +134,7 @@ def call(def base) {
                 /* Loop for dbas on the ege */
                 for (Integer j = 0; j < dbas.size(); j++) {
                     recreate_assembly = this_base.run_powershell(
-                        "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
+                        "Attempting to drop and recreate '${dbas[j]}' on '${list_of_ege_servers[i]}'",
                         ps_script,
                         this_base.get_cred_id(list_of_ege_servers[i]),
                         [
@@ -123,7 +142,20 @@ def call(def base) {
                             '_database_' : dbas[j]
                         ]
                     )
+
+                    if (recreate_assembly['response'] == 'error') {
+                        output['message'] = "FAILURE: ${dbas[j]} failed to successfully drop and rebuild"
+                        base.update_chg_ticket_desc(output['message'])
+                        return output
+                    }
+
+                    /* Update the change ticket with the databases that was be rebuilt */
+                    base.update_chg_ticket_desc(recreate_assembly['message'])
                 }
+
+                /* Update and close the change ticket after all assemblies have been rebuilt */
+                base.update_chg_ticket_desc("Completed rebuilds on ${list_of_ege_servers[i]}")
+                base.close_chg_ticket(true)
 
                 successful_databases += list_of_ege_servers[i]
             }
