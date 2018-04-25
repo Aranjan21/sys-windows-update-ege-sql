@@ -101,7 +101,7 @@ def call(def base) {
 
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
-                /* Loop for dbas on the ege */
+                /* Loop for dbas on the ege
                 for (Integer j = 0; j < dbas.size(); j++) {
                     recreate_assembly = this_base.run_powershell(
                         "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
@@ -114,7 +114,7 @@ def call(def base) {
                     )
                 }
 
-                successful_databases += list_of_ege_servers[i]
+                successful_databases += list_of_ege_servers[i] */
             }
         }
     }
@@ -124,7 +124,7 @@ def call(def base) {
     }
 
     output['response'] = 'ok'
-    output['message'] = successful_databases
+    output['message'] = dbas
 
 
     return output
