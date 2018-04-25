@@ -97,10 +97,10 @@ def call(def base) {
             for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
 
                 /* Create the change ticket */
-                def chg_desc = "Dropping and Recreating Assemblies on ${list_of_ege_servers[i]}"
+                def chg_desc = "Dropping and Recreating Assemblies"
                 def cheg_ticket = base.create_chg_ticket(
                     list_of_ege_servers[i],
-                    "Drop and Recreate Assemblies",
+                    "Drop and Recreate Assemblies on ${list_of_ege_servers[i]}",
                     chg_desc,
                     '',
                     wf_requester
@@ -125,7 +125,7 @@ def call(def base) {
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
                 /* Update the change ticket with the databases that will be rebuilt */
-                base.update_chg_ticket_desc(dbas)
+                base.update_chg_ticket_desc("${dbas}")
 
                 if (host_dbs['response'] == 'error') {
                     return host_dbs
