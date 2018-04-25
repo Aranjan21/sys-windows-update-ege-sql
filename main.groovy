@@ -10,8 +10,8 @@ def call(def base) {
         'message': ''
     ]
 
-    /* Validate and sanitize the input */
-    /* def result = this.input_validation()
+    /* Validate and sanitize the input
+    def result = this.input_validation()
 
     if (result['response'] == 'error') {
         return input_validation
@@ -130,8 +130,7 @@ def call(def base) {
     return output
 }
 
-/*
-def input_validation() {
+/* def input_validation() {
     def output = [
         'response': 'error',
         'message': ''
@@ -144,6 +143,6 @@ def input_validation() {
     }
 
     return output
-}
-*/
+} */
+
 return this
