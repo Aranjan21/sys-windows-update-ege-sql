@@ -31,4 +31,4 @@ $remote = [scriptblock]::Create(@"
 Invoke-Command -Session $ps_session -ScriptBlock $remote
 
 # IMPORTANT: Remove the PowerShell session so concurrent shells on the remote machine do not exceed the limit
-Remove-PSSession -Session $ps_session | Out-Null10.3
+Remove-PSSession -Session $ps_session | Out-Null
