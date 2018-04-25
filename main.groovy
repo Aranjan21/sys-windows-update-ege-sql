@@ -123,7 +123,7 @@ def call(def base) {
                 /* Loop for dbas on the ege */
                 for (Integer j = 0; j < dbas.size(); j++) {
                     /* Update the change ticket with the databases that was be rebuilt */
-                    base.update_chg_ticket_desc(base.get_time()" - Starting Database ${dbas[j]}")
+                    base.update_chg_ticket_desc("${base.get_time()} - Starting Database ${dbas[j]}")
 
                     recreate_assembly = base.run_powershell(
                         "Attempting to drop and recreate '${dbas[j]}' on '${list_of_ege_servers[i]}'",
@@ -143,7 +143,7 @@ def call(def base) {
                     }
 
                     /* Update the change ticket with the databases that was be rebuilt */
-                    base.update_chg_ticket_desc("Completed Database ${dbas[j]}")
+                    base.update_chg_ticket_desc("${base.get_time()} - Completed Database ${dbas[j]}")
                 }
 
                 /* Update and close the change ticket after all assemblies have been rebuilt */
