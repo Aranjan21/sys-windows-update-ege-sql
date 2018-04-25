@@ -77,51 +77,49 @@ def call(def base) {
     /* get the database creds */
     def creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'lower_region_databases', usernameVariable: '__lower_region_databases_username__', passwordVariable: '__lower_region_databases_password__']]
 
-        String username = ''
-        String password = ''
-        node('!master && domain:core.cvent.org') {
-            withCredentials(creds) {
-                /* Run the PowerShell script */
-                /* Loop for servers */
-                for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
-                    this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
+    node('!master && os:windows && domain:core.cvent.org') {
+        withCredentials(creds) {
+            /* Run the PowerShell script */
+            /* Loop for servers */
+            for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
+                this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
-                    host_dbs = this_base.run_powershell(
-                        "Attempting to get the databases from the machine",
-                        get_dbs,
-                        this_base.get_cred_id(list_of_ege_servers[0]),
-                            [
-                                '_address_': list_of_ege_servers[0],
-                                '__lower_region_databases_username__' : username,
-                                '__lower_region_databases_password__' : password
-                            ]
-                    )
+                host_dbs = this_base.run_powershell(
+                    "Attempting to get the databases from the machine",
+                    get_dbs,
+                    this_base.get_cred_id(list_of_ege_servers[i]),
+                        [
+                            '_address_' : list_of_ege_servers[i],
+                            '__lower_region_databases_username__' : usernameVariable,
+                            '__lower_region_databases_password__' : passwordVariable
+                        ]
+                )
 
-                    if (host_dbs['response'] == 'error') {
-                        return host_dbs
-                    }
-
-                    dbas = host_dbs['message'].replace(' ', '').split('\r\n')
-
-                    /* Loop for dbas on the ege */
-                    for (Integer j = 0; j < dbas.size(); j++) {
-                        recreate_assembly = this_base.run_powershell(
-                            "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
-                            ps_script,
-                            this_base.get_cred_id(list_of_ege_servers[i]),
-                            [
-                                '_address_' : list_of_ege_servers[i],
-                                '_database_' : dbas[j],
-                                '__lower_region_databases_username__' : username,
-                                '__lower_region_databases_password__' : password
-                            ]
-                        )
-                    }
-
-                    successful_databases += list_of_ege_servers[i]
+                if (host_dbs['response'] == 'error') {
+                    return host_dbs
                 }
+
+                dbas = host_dbs['message'].replace(' ', '').split('\r\n')
+
+                /* Loop for dbas on the ege */
+                for (Integer j = 0; j < dbas.size(); j++) {
+                    recreate_assembly = this_base.run_powershell(
+                        "Attempting to drop and recreate assemblies on '${list_of_ege_servers[i]}'",
+                        ps_script,
+                        this_base.get_cred_id(list_of_ege_servers[i]),
+                        [
+                            '_address_' : list_of_ege_servers[i],
+                            '_database_' : dbas[j],
+                            '__lower_region_databases_username__' : usernameVariable,
+                            '__lower_region_databases_password__' : passwordVariable
+                        ]
+                    )
+                }
+
+                successful_databases += list_of_ege_servers[i]
             }
         }
+    }
 
     if (successful_databases != list_of_ege_servers) {
         output['message'] = 'not all of the servers completed successfully'
