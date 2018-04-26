@@ -94,6 +94,7 @@ def call(def base) {
 
     def dbas = []
     def successful_databases = []
+    def steps = [:]
 
     /* Loop through each assembly on each ege database */
     node('!master && os:windows && domain:core.cvent.org') {
@@ -101,6 +102,21 @@ def call(def base) {
             /* Run the PowerShell scripts */
             /* Loop for servers */
             for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
+
+                /* Create a DataDog event for the activity */
+                steps = this.create_tlsint_req(
+                    [
+                        'method': 'datadog_create_event',
+                        'params':
+                        [
+                            'title': "Recreating database assemblies for ${wf_region} region",
+                            'text': 'Post patching activity for EGE servers requires the NOC to drop and rebuild the database assemblies for each EGE host within the patched region',
+                            'priority': 'normal',
+                            'host': "${list_of_ege_servers[i]}",
+                            'alert_type': 'info'
+                        ]
+                    ]
+                )
 
                 this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
