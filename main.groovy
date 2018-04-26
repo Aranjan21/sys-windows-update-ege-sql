@@ -44,7 +44,8 @@ def call(def base) {
     }
 
     /* Read the PowerShell files for the workflow */
-    this_base.log("getting PS file")
+    this_base.log('getting PS file')
+
     def ps_script = this_base.read_wf_file('sys-windows-update-ege-sql','ege-drop-and-recreate-assemblies.ps1')
 
     if (ps_script['response'] == 'error') {
@@ -79,7 +80,7 @@ def call(def base) {
     }
 
     /* Create the change ticket */
-    def chg_desc = "Dropping and Recreating Assemblies"
+    def chg_desc = 'Dropping and Recreating Assemblies'
     def chg_ticket = this_base.create_chg_ticket(
         list_of_ege_servers[0],
         "Drop and Recreate Assemblies on ${wf_region} EGE servers",
@@ -102,11 +103,11 @@ def call(def base) {
                 this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
                 host_dbs = this_base.run_powershell(
-                    "Attempting to get the databases from the machine",
+                    'Attempting to get the databases from the machine',
                     get_dbs,
                     this_base.get_cred_id(list_of_ege_servers[i]),
                         [
-                            '_address_' : list_of_ege_servers[i]
+                            '_address_': list_of_ege_servers[i]
                         ]
                 )
 
@@ -129,8 +130,8 @@ def call(def base) {
                         ps_script,
                         this_base.get_cred_id(list_of_ege_servers[i]),
                         [
-                            '_address_' : list_of_ege_servers[i],
-                            '_database_' : dbas[j]
+                            '_address_': list_of_ege_servers[i],
+                            '_database_': dbas[j]
                         ]
                     )
 
