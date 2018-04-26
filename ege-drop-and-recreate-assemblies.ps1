@@ -22,17 +22,13 @@ $remote = [scriptblock]::Create(@"
 
     `$query = [IO.File]::ReadAllText("D:\sqltest\EGE_drop_and_recreate_assemblies.sql")
 
-    Write-Output "Starting Script"
-
     # The sql script generates a bunch of warnings, so we're suppressing them with the below setting
     `$WarningPreference = "silentlyContinue"
     try {
         `$newquery = `$query -replace "USE \[EGE_TARGET\]","USE [$env:_database_]"
-        Write-Output "Starting Database: $env:_database_"
         Invoke-Sqlcmd -Username $env:__database_username__ -Password $env:__database_password__ -Query `$newquery -ServerInstance "localhost,50000" -ConnectionTimeout 30 -QueryTimeout 90
     } catch {
         `$errormessage = "ERROR: `$_"
-        Write-Error `$errormessage
     }
 
     Write-Output "Completed Database: $env:_database_"

@@ -13,7 +13,7 @@ def call(def base) {
     def result = ''
 
     /* Find the servers that the script needs run against */
-    def vcenters = ['mg20-vcsa1-001.core.cvent.org']
+    def vcenters = ['mg20-vcsa1-001.core.cvent.org', 'mg11-vcsa1-001.core.cvent.org', 'mg01-vcsa1-001.core.cvent.org', 'mg01-vcsa1-011.core.cvent.org']
     def list_of_vms = ''
 
     for (Integer i = 0; i < vcenters.size(); i++) {
@@ -62,8 +62,6 @@ def call(def base) {
 
     get_dbs = get_dbs['message']
 
-    def dbas = []
-    def successful_databases = []
     def creds = ''
 
     /* get the database creds */
@@ -94,9 +92,13 @@ def call(def base) {
         return output
     }
 
+    def dbas = []
+    def successful_databases = []
+
+    /* Loop through each assembly on each ege database */
     node('!master && os:windows && domain:core.cvent.org') {
         withCredentials(creds) {
-            /* Run the PowerShell script */
+            /* Run the PowerShell scripts */
             /* Loop for servers */
             for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
 
@@ -110,7 +112,7 @@ def call(def base) {
                             '_address_': list_of_ege_servers[i]
                         ]
                 )
-
+                /* Parse and split the result into an array */
                 dbas = host_dbs['message'].replace(' ', '').split('\r\n')
 
                 /* Update the change ticket with the databases that will be rebuilt */
@@ -155,9 +157,9 @@ def call(def base) {
             }
         }
     }
-
+    /* Verify that all of the tested servers were successful */
     if (successful_databases != list_of_ege_servers) {
-        output['message'] = 'not all of the servers completed successfully'
+        output['message'] = 'Either all of the databases did not complete successfully or one of them was skipped. View the change ticket or Jenkins console to see which nodes the script ran against.'
         return output
     }
 
