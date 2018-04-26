@@ -115,7 +115,8 @@ def call(def base) {
                             'text': 'Post patching activity for EGE servers requires the NOC to drop and rebuild the database assemblies for each EGE host within the patched region',
                             'priority': 'normal',
                             'host': "${list_of_ege_servers[i]}",
-                            'alert_type': 'info'
+                            'alert_type': 'info',
+                            'source_type_name': 'jenkins'
                         ]
                     ]
                 )
