@@ -46,7 +46,7 @@ def call(def base) {
     /* Read the PowerShell files for the workflow */
     this_base.log('getting PS file')
 
-    def ps_script = this_base.read_wf_file('sys-windows-update-ege-sql','ege-drop-and-recreate-assemblies.ps1')
+    def ps_script = this_base.read_wf_file('sys-windows-update-ege-sql', 'ege-drop-and-recreate-assemblies.ps1')
 
     if (ps_script['response'] == 'error') {
         return ps_script
