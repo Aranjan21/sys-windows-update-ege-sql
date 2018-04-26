@@ -106,7 +106,7 @@ def call(def base) {
             for (Integer i = 0; i < list_of_ege_servers.size(); i++) {
 
                 /* Create a DataDog event for the activity */
-                steps = this_base.create_tlsint_req(
+                steps = this_base.tlsint_req(
                     [
                         'method': 'datadog_create_event',
                         'params':
