@@ -13,7 +13,9 @@ def call(def base) {
     def result = ''
 
     /* Find the servers that the script needs run against */
-    def vcenters = ['mg20-vcsa1-001.core.cvent.org', 'mg11-vcsa1-001.core.cvent.org', 'mg01-vcsa1-001.core.cvent.org', 'mg01-vcsa1-011.core.cvent.org']
+    /* def vcenters = ['mg20-vcsa1-001.core.cvent.org', 'mg11-vcsa1-001.core.cvent.org', 'mg01-vcsa1-001.core.cvent.org', 'mg01-vcsa1-011.core.cvent.org'] */
+    def vcenters = ['mg20-vcsa1-001.core.cvent.org']
+
     def list_of_vms = ''
 
     for (Integer i = 0; i < vcenters.size(); i++) {
