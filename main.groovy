@@ -13,7 +13,7 @@ def call(def base) {
     def result = ''
 
     /* Find the servers that the script needs run against */
-    /* def vcenters = ['mg20-vcsa1-001.core.cvent.org', 'mg11-vcsa1-001.core.cvent.org', 'mg01-vcsa1-001.core.cvent.org', 'mg01-vcsa1-011.core.cvent.org'] */
+    /* def vcenters = ['mg20-vcsa1-001.core.cvent.org', 'mg11-vcsa1-001.core.cvent.org', 'mg01-vcsa1-001.core.cvent.org', 'mg01-vcsa1-011.core.cvent.org']
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
 
     def list_of_vms = ''
@@ -43,7 +43,9 @@ def call(def base) {
         if (list_of_vms[i].contains(wf_region + '-ege')) {
             list_of_ege_servers += list_of_vms[i]
         }
-    }
+    } */
+
+    list_of_ege_servers = ['ap20-ege-101']
 
     /* Read the PowerShell files for the workflow */
     this_base.log('getting PS file')
