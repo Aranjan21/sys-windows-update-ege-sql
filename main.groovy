@@ -66,6 +66,11 @@ def call(def base) {
 
     def creds = ''
 
+    if (wf_region != 'ap20' || this.base.prod__cluster() == true) {
+        output['message'] = 'Either the region is not alpha or the cluster is using Production'
+        return output
+    }
+
     /* get the database creds */
     if (wf_region == 'ap20') {
         creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ap20_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
@@ -76,7 +81,7 @@ def call(def base) {
     } else if (wf_region == 'ct50') {
         creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ct50_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
     } else if (wf_region == 'pr01' || wf_region == 'pr11') {
-        creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'p2_databse', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
+        creds = [[$class: 'UsernamePasswordMultiBinding', credentialsId: 'p2_database', usernameVariable: '__database_username__', passwordVariable: '__database_password__']]
     }
 
     /* Create the change ticket */
@@ -123,7 +128,7 @@ def call(def base) {
 
                 this_base.log("getting the databases from '${list_of_ege_servers[i]}'")
 
-                host_dbs = this_base.run_powershell(
+                def host_dbs = this_base.run_powershell(
                     'Attempting to get the databases from the machine',
                     get_dbs,
                     this_base.get_cred_id(list_of_ege_servers[i]),
@@ -146,7 +151,7 @@ def call(def base) {
                 /* Loop for dbas on the ege */
                 for (Integer j = 0; j < dbas.size(); j++) {
 
-                    recreate_assembly = this_base.run_powershell(
+                    def recreate_assembly = this_base.run_powershell(
                         "Attempting to drop and recreate '${dbas[j]}' on '${list_of_ege_servers[i]}'",
                         ps_script,
                         this_base.get_cred_id(list_of_ege_servers[i]),
@@ -165,12 +170,11 @@ def call(def base) {
 
                     /* Update the change ticket with the databases that was be rebuilt */
                     time = this_base.get_time()
-                    this_base.update_chg_ticket_desc("${time} - ${dbas[j]} was rebuilt successful")
+                    this_base.update_chg_ticket_desc("${time} - ${dbas[j]} was rebuilt successfully")
                 }
 
                 /* Update and close the change ticket after all assemblies have been rebuilt */
                 this_base.update_chg_ticket_desc("SUCCESS: All assembly rebuilds have completed successfully on ${list_of_ege_servers[i]}")
-                this_base.close_chg_ticket(true)
 
                 successful_databases += list_of_ege_servers[i]
             }
@@ -181,6 +185,8 @@ def call(def base) {
         output['message'] = 'Either all of the databases did not complete successfully or one of them was skipped. View the change ticket or Jenkins console to see which nodes the script ran against.'
         return output
     }
+
+    this_base.close_chg_ticket(true)
 
     output['response'] = 'ok'
     output['message'] = "The following hosts successfully had their databases rebuilt: ${successful_databases}"
