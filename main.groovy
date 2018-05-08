@@ -80,7 +80,7 @@ def call(def base) {
 
     def creds = ''
 
-    if (wf_region != 'ap20' || this_base.prod__cluster() == true) {
+    if (wf_region != 'ap20' || this_base.prod_cluster() == true) {
         output['message'] = 'Either the region is not alpha or the cluster is using Production'
         return output
     }
