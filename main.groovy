@@ -17,6 +17,13 @@ def call(def base) {
     def vcenters = ['mg20-vcsa1-001.core.cvent.org']
 
     def list_of_vms = ''
+    def list_of_ege_servers = []
+
+    /* Determine which machines the script will run against based on patch group */
+    def remainder = 0           /* defaults to even */
+    if (wf_patch_group == 'Odd') {
+        remainder = 1
+    }
 
     for (Integer i = 0; i < vcenters.size(); i++) {
         result = this_base.run_vmwarecli(
@@ -37,10 +44,8 @@ def call(def base) {
         }
     }
 
-    list_of_ege_servers = []
-
     for (Integer i = 0; i < list_of_vms.size(); i++) {
-        if (list_of_vms[i].contains(wf_region + '-ege')) {
+        if (list_of_vms[i].contains(wf_region + '-ege') && list_of_vms[i][-1].toInteger() % 2 == remainder) {
             list_of_ege_servers += list_of_vms[i]
         }
     }
