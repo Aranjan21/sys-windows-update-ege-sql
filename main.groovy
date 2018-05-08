@@ -45,6 +45,9 @@ def call(def base) {
         }
     }
 
+    output['message'] = list_of_ege_servers
+    return output
+
     /* Read the PowerShell files for the workflow */
     this_base.log('getting PS file')
 
@@ -70,9 +73,6 @@ def call(def base) {
         output['message'] = 'Either the region is not alpha or the cluster is using Production'
         return output
     }
-
-    output['message'] = list_of_ege_servers
-    return output
 
     /* get the database creds */
     if (wf_region == 'ap20') {
