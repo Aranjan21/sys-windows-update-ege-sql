@@ -194,7 +194,7 @@ def call(def base) {
     /* Verify that all of the tested servers were successful */
     if (successful_databases != list_of_ege_servers) {
         output['message'] = 'Either all of the databases did not complete successfully or one of them was skipped. View the change ticket or Jenkins console to see which nodes the script ran against.'
-        this_base.update_chg_ticket_desc(output['message']
+        this_base.update_chg_ticket_desc(output['message'])
         this_base.close_chg_ticket(false)
         return output
     }
