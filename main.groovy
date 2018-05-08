@@ -71,7 +71,7 @@ def call(def base) {
         return output
     }
 
-    this_base.log("${list_of_ege_servers}")
+    output['message'] = list_of_ege_servers
     return output
 
     /* get the database creds */
