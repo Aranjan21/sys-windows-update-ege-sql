@@ -44,6 +44,7 @@ def call(def base) {
         }
     }
 
+    /* Parse out which servers are too be run against based on the user input */
     if (wf_patch_group != 'All') {
         for (Integer i = 0; i < list_of_vms.size(); i++) {
             if (list_of_vms[i].contains(wf_region + '-ege') && list_of_vms[i][-1].toInteger() % 2 == remainder) {
@@ -57,9 +58,6 @@ def call(def base) {
             }
         }
     }
-
-    output['message'] = list_of_ege_servers
-    return output
 
     /* Read the PowerShell files for the workflow */
     this_base.log('getting PS file')
