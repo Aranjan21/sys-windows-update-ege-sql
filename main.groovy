@@ -44,9 +44,17 @@ def call(def base) {
         }
     }
 
-    for (Integer i = 0; i < list_of_vms.size(); i++) {
-        if (list_of_vms[i].contains(wf_region + '-ege') && list_of_vms[i][-1].toInteger() % 2 == remainder) {
-            list_of_ege_servers += list_of_vms[i]
+    if (wf_patch_group != 'All') {
+        for (Integer i = 0; i < list_of_vms.size(); i++) {
+            if (list_of_vms[i].contains(wf_region + '-ege') && list_of_vms[i][-1].toInteger() % 2 == remainder) {
+                list_of_ege_servers += list_of_vms[i]
+            }
+        }
+    } else {
+        for (Integer i = 0; i < list_of_vms.size(); i++) {
+            if (list_of_vms[i].contains(wf_region + '-ege')) {
+                list_of_ege_servers += list_of_vms[i]
+            }
         }
     }
 
