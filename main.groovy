@@ -78,12 +78,12 @@ def call(def base) {
 
     get_dbs = get_dbs['message']
 
-    def creds = ''
-
     if (wf_region != 'ap20' || this_base.prod_cluster() == true) {
         output['message'] = 'Either the region is not alpha or the cluster is using Production'
         return output
     }
+
+    def creds = ''
 
     /* get the database creds */
     if (wf_region == 'ap20') {
@@ -187,9 +187,6 @@ def call(def base) {
                     this_base.update_chg_ticket_desc("${time} - ${dbas[j]} was rebuilt successfully")
                 }
 
-                /* Update and close the change ticket after all assemblies have been rebuilt */
-                this_base.update_chg_ticket_desc("SUCCESS: All assembly rebuilds have completed successfully on ${list_of_ege_servers[i]}")
-
                 successful_databases += list_of_ege_servers[i]
             }
         }
@@ -197,9 +194,13 @@ def call(def base) {
     /* Verify that all of the tested servers were successful */
     if (successful_databases != list_of_ege_servers) {
         output['message'] = 'Either all of the databases did not complete successfully or one of them was skipped. View the change ticket or Jenkins console to see which nodes the script ran against.'
+        this_base.update_chg_ticket_desc(output['message']
+        this_base.close_chg_ticket(false)
         return output
     }
 
+    /* Update and close the change ticket after all assemblies have been rebuilt */
+    this_base.update_chg_ticket_desc("SUCCESS: All assembly rebuilds have completed successfully on ${list_of_ege_servers[i]}")
     this_base.close_chg_ticket(true)
 
     output['response'] = 'ok'
